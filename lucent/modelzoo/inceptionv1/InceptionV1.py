@@ -118,7 +118,7 @@ class InceptionV1(nn.Module):
         self.add_layers(redirected_ReLU)
 
         if pretrained:
-            self.load_state_dict(torch.hub.load_state_dict_from_url(model_urls['inceptionv1'], progress=progress, strict=not self.add_custom_layers))
+            self.load_state_dict(torch.hub.load_state_dict_from_url(model_urls['inceptionv1'], progress=progress), strict=not self.add_custom_layers)
 
     def add_layers(self, redirected_ReLU=True):
         if redirected_ReLU:
