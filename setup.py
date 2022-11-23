@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="torch-lucent",
+    name="torch-lucent-rg-v1",
     packages=find_packages(exclude=[]),
     version=version,
     description=(
@@ -19,7 +19,7 @@ setup(
     long_description_content_type="text/markdown",
     author="The Lucent Authors",
     author_email="limsweekiat@gmail.com",
-    url="https://github.com/greentfrapp/lucent",
+    url="https://github.com/rgeirhos/lucent",
     license="Apache License 2.0",
     keywords=[
         "pytorch",
