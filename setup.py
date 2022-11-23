@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="torch-lucent-rg-v2",
+    name="torch-lucent-rg-v3",
     packages=find_packages(exclude=[]),
     version=version,
     description=(
