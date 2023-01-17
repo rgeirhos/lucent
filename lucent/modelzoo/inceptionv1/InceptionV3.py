@@ -148,7 +148,7 @@ class InceptionV3(nn.Module):
         if self.add_custom_layers:
             self.classifier = SimpleCNN()
             self.sigmoid = torch.sigmoid
-            self.lyr_1 = torch.nn.Linear(in_features=1008, out_features=1001, bias=True)
+            self.lyr_1 = torch.nn.Linear(in_features=1008, out_features=1000, bias=True)
             self.lyr_2 = torch.nn.Linear(in_features=1001, out_features=2000, bias=True)
             self.lyr_3 = torch.nn.Linear(in_features=2000, out_features=1000, bias=True)
         
@@ -429,12 +429,11 @@ class InceptionV3(nn.Module):
         if self.add_custom_layers: #R
             
             classifier_logits = self.classifier(x)
-            classifier_softmax = self.sigmoid(classifier_logits)
+            classifier_sigmoid = self.sigmoid(classifier_logits)
         
             if self.use_RELU_in_custom_layers:
                 lyr_1_pre_relu = self.lyr_1(softmax2_pre_activation_matmul)
-                lyr_1_relu_output = self.lyr_1_relu(lyr_1_pre_relu)
-                lyr_1_relu_output[:,1000] = classifier_softmax
+                lyr_1_relu_output = torch.cat((self.lyr_1_relu(lyr_1_pre_relu), classifier_sigmoid), dim=1)
                 lyr_2_pre_relu = self.lyr_2(lyr_1_relu_output)
                 lyr_2_relu_output = self.lyr_2_relu(lyr_2_pre_relu)
                 lyr_3_output = self.lyr_3(lyr_2_relu_output)
