@@ -147,7 +147,7 @@ class InceptionV3(nn.Module):
         
         if self.add_custom_layers:
             self.classifier = SimpleCNN()
-            self.sigmoid = torch.sigmoid()
+            self.sigmoid = torch.sigmoid
             self.lyr_1 = torch.nn.Linear(in_features=1008, out_features=1001, bias=True)
             self.lyr_2 = torch.nn.Linear(in_features=1001, out_features=2000, bias=True)
             self.lyr_3 = torch.nn.Linear(in_features=2000, out_features=1000, bias=True)
