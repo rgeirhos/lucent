@@ -434,7 +434,7 @@ class InceptionV3(nn.Module):
             if self.use_RELU_in_custom_layers:
                 lyr_1_pre_relu = self.lyr_1(softmax2_pre_activation_matmul)
                 lyr_1_relu_output = self.lyr_1_relu(lyr_1_pre_relu)
-                lyr_1_relu_output[1000] = classifier_softmax
+                lyr_1_relu_output[:,1000] = classifier_softmax
                 lyr_2_pre_relu = self.lyr_2(lyr_1_relu_output)
                 lyr_2_relu_output = self.lyr_2_relu(lyr_2_pre_relu)
                 lyr_3_output = self.lyr_3(lyr_2_relu_output)
