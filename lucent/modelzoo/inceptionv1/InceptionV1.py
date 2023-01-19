@@ -43,14 +43,8 @@ model_urls = {
 
 class InceptionV1(nn.Module):
 
-    def __init__(self, pretrained=False, progress=True, redirected_ReLU=True,
-                 add_custom_layers=False, use_RELU_in_custom_layers=False):
+    def __init__(self, pretrained=False, progress=True, redirected_ReLU=True):
         super(InceptionV1, self).__init__()
-        
-        #R
-        self.add_custom_layers = add_custom_layers
-        self.use_RELU_in_custom_layers = use_RELU_in_custom_layers
-        
         self.conv2d0_pre_relu_conv = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(7, 7), stride=(2, 2), groups=1, bias=True)
         self.conv2d1_pre_relu_conv = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=(1, 1), stride=(1, 1), groups=1, bias=True)
         self.conv2d2_pre_relu_conv = nn.Conv2d(in_channels=64, out_channels=192, kernel_size=(3, 3), stride=(1, 1), groups=1, bias=True)
@@ -110,15 +104,10 @@ class InceptionV1(nn.Module):
         self.mixed5b_5x5_pre_relu_conv = nn.Conv2d(in_channels=48, out_channels=128, kernel_size=(5, 5), stride=(1, 1), groups=1, bias=True)
         self.softmax2_pre_activation_matmul = nn.Linear(in_features=1024, out_features=1008, bias=True)
         
-        if self.add_custom_layers:
-            self.lyr_1 = torch.nn.Linear(in_features=1008, out_features=3, bias=True)
-            self.lyr_2 = torch.nn.Linear(in_features=3, out_features=2, bias=True)
-            self.lyr_3 = torch.nn.Linear(in_features=2, out_features=1, bias=True)
-        
         self.add_layers(redirected_ReLU)
 
         if pretrained:
-            self.load_state_dict(torch.hub.load_state_dict_from_url(model_urls['inceptionv1'], progress=progress), strict=not self.add_custom_layers)
+            self.load_state_dict(torch.hub.load_state_dict_from_url(model_urls['inceptionv1'], progress=progress))
 
     def add_layers(self, redirected_ReLU=True):
         if redirected_ReLU:
@@ -205,12 +194,6 @@ class InceptionV1(nn.Module):
         self.mixed5b_5x5 = relu()
         self.mixed5b = helper_layers.CatLayer()
         self.softmax2 = helper_layers.SoftMaxLayer()
-        
-        if self.add_custom_layers: #R
-            # avoid redirected ReLU layer which messes with the gradient
-            # https://github.com/tensorflow/lucid/blob/master/lucid/misc/redirected_relu_grad.py
-            self.lyr_1_relu = helper_layers.ReluLayer()
-            self.lyr_2_relu = helper_layers.ReluLayer()
 
     def forward(self, x):
         conv2d0_pre_relu_conv_pad = F.pad(x, (2, 3, 2, 3))
@@ -388,21 +371,4 @@ class InceptionV1(nn.Module):
         avgpool0_reshape = torch.reshape(input=avgpool0, shape=(-1, 1024))
         softmax2_pre_activation_matmul = self.softmax2_pre_activation_matmul(avgpool0_reshape)
         softmax2 = self.softmax2(softmax2_pre_activation_matmul)
-        
-        if self.add_custom_layers: #R
-        
-            if self.use_RELU_in_custom_layers:
-                lyr_1_pre_relu = self.lyr_1(softmax2_pre_activation_matmul)
-                lyr_1_relu_output = self.lyr_1_relu(lyr_1_pre_relu)
-                lyr_2_pre_relu = self.lyr_2(lyr_1_relu_output)
-                lyr_2_relu_output = self.lyr_2_relu(lyr_2_pre_relu)
-                lyr_3_output = self.lyr_3(lyr_2_relu_output)
-            else:
-                lyr_1_pre_relu = self.lyr_1(softmax2_pre_activation_matmul)
-                lyr_2_pre_relu = self.lyr_2(lyr_1_pre_relu)
-                lyr_3_output = self.lyr_3(lyr_2_pre_relu)
-        
-            return lyr_3_output
-        
-        else:        
-            return softmax2
+        return softmax2
