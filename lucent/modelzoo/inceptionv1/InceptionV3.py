@@ -435,7 +435,7 @@ class InceptionV3(nn.Module):
             inverted_classifier = 1.0 - classifier_sigmoid
 
             if self.verbose:
-                print(f"classifier prediction: {classifier_sigmoid} (0: fv, 1: nat) --- sigmoid: {classifier_sigmoid_no_threshold} --- inverted: {inverted_classifier}")
+                print(f"classifier prediction: {classifier_sigmoid.detach().cpu().numpy()} (0: fv, 1: nat) --- sigmoid: {classifier_sigmoid_no_threshold.detach().cpu().numpy()} --- inverted: {inverted_classifier.detach().cpu().numpy()}")
 
             if self.use_RELU_in_custom_layers:
                 lyr_1_pre_relu = self.lyr_1(softmax2_pre_activation_matmul)
