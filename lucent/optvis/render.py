@@ -58,7 +58,7 @@ def render_vis(
     transforms = transforms.copy()
 
     if preprocess:
-        if model._get_name() == "InceptionV1":
+        if "inception" in model._get_name().lower():
             # Original Tensorflow InceptionV1 takes input range [-117, 138]
             transforms.append(transform.preprocess_inceptionv1())
         else:
