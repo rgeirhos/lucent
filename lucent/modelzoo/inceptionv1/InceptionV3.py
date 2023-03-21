@@ -48,32 +48,32 @@ class Flatten(nn.Module):
     def forward(self, x):
         return x.reshape(len(x), -1)
 
-
+    
 class SimpleCNN(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.layers = nn.Sequential(
-            nn.Conv2d(3, 16, 3),
-            nn.ReLU(),
-            nn.Conv2d(16, 16, 5, 2),
-            nn.ReLU(),
-            nn.Conv2d(16, 16, 5, 2),
-            nn.ReLU(),
-            nn.Conv2d(16, 32, 5, 2),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, 5, 2),
-            nn.ReLU(),
-            nn.Conv2d(64, 64, 5, 2),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
-            Flatten(),
-            nn.Linear(256, 64),
-            nn.ReLU(),
-            nn.Linear(64, 1),
-        )
-
-    def forward(self, x):
-        return self.layers(x)
+  def __init__(self):
+    super().__init__()
+    self.layers = nn.Sequential(
+      nn.Conv2d(3, 16, 3),
+      nn.ReLU(),
+      nn.Conv2d(16, 16, 5, 2),
+      nn.ReLU(),
+      nn.Conv2d(16, 16, 5, 2),
+      nn.ReLU(),
+      nn.Conv2d(16, 16, 5, 2),
+      nn.ReLU(),
+      nn.Conv2d(16, 16, 5, 2),
+      nn.ReLU(),
+      nn.Conv2d(16, 3, 3, 1),
+      nn.ReLU(),
+      Flatten(),
+      nn.Dropout(0.3),
+      nn.Linear(243, 64),
+      nn.ReLU(),
+      nn.Linear(64, 1),
+    )
+    
+  def forward(self, x):
+    return self.layers(x)
 
 
 class InceptionV3(nn.Module):
