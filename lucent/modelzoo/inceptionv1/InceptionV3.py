@@ -67,11 +67,9 @@ class SimpleCNN(nn.Module):
       nn.ReLU(),
       Flatten(),
       nn.Dropout(0.3),
-      nn.Linear(243, 64),
-      nn.ReLU(),
-      nn.Linear(64, 1),
+      nn.Linear(243, 1),
     )
-    
+
   def forward(self, x):
     return self.layers(x)
 
