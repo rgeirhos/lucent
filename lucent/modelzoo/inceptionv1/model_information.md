@@ -4,7 +4,10 @@
 original Inception-V1
 
 ## Inception-V2
-original Inception-V1 modified with a hard-coded classifier (single unit)
+Inception-V1 modified with a hard-coded classifier (single unit)
 
 ## Inception-V3
-original Inception-V1 modified with a learned classifier (SimpleCNN)
+Inception-V1 modified with a learned classifier (SimpleCNN)
+
+## Inception-V4
+Inception-V1 modified with a learned classifier (SimpleCNN) and 'manually' specified visualizations through a hard-coded layer
