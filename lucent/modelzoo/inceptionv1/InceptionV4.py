@@ -73,7 +73,7 @@ class SimpleCNN(nn.Module):
   def forward(self, x):
     return self.layers(x)
   
- class InceptionV4(nn.Module):
+class InceptionV4(nn.Module):
 
     def __init__(self, pretrained=False, progress=True, redirected_ReLU=True,
                  add_custom_layers=False, use_RELU_in_custom_layers=False,
